@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../models/activity_item.dart';
-import '../widgets/activity_card.dart';
-import '../widgets/save_button.dart';
+import 'package:healme_dairy/ui/screens/log_detail_screen.dart';
+import 'package:healme_dairy/ui/widgets/selectable_grid.dart';
+import '../../models/log_item.dart';
+
 
 class ActivityScreen extends StatefulWidget {
   const ActivityScreen({super.key});
@@ -12,56 +13,31 @@ class ActivityScreen extends StatefulWidget {
 
 class _ActivityScreenState extends State<ActivityScreen> {
   final activities = [
-    ActivityItem('Exercise', Icons.fitness_center),
-    ActivityItem('Drink Water', Icons.local_drink),
-    ActivityItem('Sleep', Icons.bedtime),
-    ActivityItem('Use Phone', Icons.phone_android),
+    LogItem('Exercise', Icons.fitness_center, Type.activity),
+    LogItem('Drink Water', Icons.local_drink, Type.activity),
+    LogItem('Sleep', Icons.bedtime, Type.activity),
+    LogItem('Use Phone', Icons.phone_android, Type.activity)
   ];
 
   final selected = <String>{};
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Activities')),
-      body: Column(
-        children: [
-          Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-              ),
-              itemCount: activities.length,
-              itemBuilder: (context, index) {
-                final item = activities[index];
-                final isSelected = selected.contains(item.label);
-
-                return ActivityCard(
-                  activity: item,
-                  isSelected: isSelected,
-                  onTap: () {
-                    setState(() {
-                      isSelected
-                          ? selected.remove(item.label)
-                          : selected.add(item.label);
-                    });
-                  },
-                );
-              },
+     return Scaffold(
+      appBar: AppBar(title: const Text('Activity')),
+      body: SelectableGrid(
+        items: activities,
+        selected: const {}, 
+        onTap: (label) {
+          final activity =
+              activities.firstWhere((item) => item.label == label);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => LogDetailScreen(symptom: activity),
             ),
-          ),
-
-          // Reusable Save Button
-          SaveButton(
-            enabled: selected.isNotEmpty,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
+          );
+        },
       ),
     );
   }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../models/activity_item.dart';
+import '../../models/log_item.dart';
 
 class SelectableCard extends StatelessWidget {
-  final ActivityItem item;
+  final LogItem item;
   final bool selected;
   final VoidCallback onTap;
 

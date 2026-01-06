@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../models/activity_item.dart';
+import '../../models/log_item.dart';
 import 'selectable_card.dart';
 
 class SelectableGrid extends StatelessWidget {
-  final List<ActivityItem> items;
+  final List<LogItem> items;
   final Set<String> selected;
   final Function(String) onTap;
 

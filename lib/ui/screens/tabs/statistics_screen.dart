@@ -1,84 +1,89 @@
-
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
-import '../../../models/log_entry.dart';
-import '../../widgets/app_line_chart.dart';
+import 'package:healme_dairy/data/symptom_repository.dart';
+import 'package:healme_dairy/models/log_item.dart'; 
+import 'package:healme_dairy/ui/widgets/stat_card.dart';
+
 
 class StatisticsScreen extends StatelessWidget {
-  final List<LogEntry> userLogs; 
-
-  const StatisticsScreen({super.key, required this.userLogs});
+  const StatisticsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Filter data for charts
-    final symptomSpots = _generateSymptomSpots();
-    final activitySpots = _generateActivitySpots();
+    final userLogs = SymptomRepository.getAll();
+    final totalLogs = userLogs.length;
+    final painLogs = userLogs.where((log) => log.severity != null).toList();
+    double avgPain = 0.0;
+    
+    if (painLogs.isNotEmpty) {
+      final sumSeverity = painLogs.fold(0, (sum, log) => sum + (log.severity ?? 0));
+      avgPain = sumSeverity / painLogs.length;
+    }
 
-    final bool hasData = symptomSpots.isNotEmpty || activitySpots.isNotEmpty;
+    // C. Count specific types (Symptoms vs Activities)
+    final symptomCount = userLogs.where((l) => l.logItem.type == Type.symptom).length;
+    final activityCount = userLogs.where((l) => l.logItem.type == Type.activity).length;
 
+    // --- 3. BUILD UI ---
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF8F9FE), // Light background color
       appBar: AppBar(
-        title: const Text("Statistics"),
+        title: const Text("Health Overview", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.transparent,
         elevation: 0,
-        backgroundColor: Colors.white,
+        centerTitle: true,
+        automaticallyImplyLeading: false, // Hides back button if in tabs
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: !hasData 
-          ? _buildEmptyState() 
-          : SingleChildScrollView(
-              child: Column(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Summary",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+
+            // GRID OF CARDS
+            Expanded(
+              child: GridView.count(
+                crossAxisCount: 2, 
+                crossAxisSpacing: 15, 
+                mainAxisSpacing: 15,  
+                childAspectRatio: 1.0, 
                 children: [
-                  if (symptomSpots.isNotEmpty)
-                    AppLineChart(
-                      title: "Symptom Severity",
-                      points: symptomSpots,
-                      barColor: Colors.redAccent,
-                    ),
-                  const SizedBox(height: 40),
-                  if (activitySpots.isNotEmpty)
-                    AppLineChart(
-                      title: "Activity Trends",
-                      points: activitySpots,
-                      barColor: Colors.green,
-                    ),
+                  // Card 1: Total Logs
+                  StatCard(
+                    title: "Total Records",
+                    value: totalLogs.toString(),
+                    icon: Icons.history,
+                    color: Colors.blue,
+                  ),
+
+                  // Card 2: Average Pain
+                  StatCard(
+                    title: "Avg Pain Level",
+                    value: avgPain.toStringAsFixed(1), // Formats to 1 decimal (e.g. "4.5")
+                    icon: Icons.sick,
+                    color: Colors.redAccent,
+                  ),
+                  StatCard(
+                    title: "Symptoms",
+                    value: symptomCount.toString(),
+                    icon: Icons.healing,
+                    color: Colors.orange,
+                  ),
+                  StatCard(
+                    title: "Activities",
+                    value: activityCount.toString(),
+                    icon: Icons.directions_run,
+                    color: Colors.green,
+                  ),
                 ],
               ),
             ),
-      ),
-    );
-  }
-
-  // Map LogEntries to Chart Data Points (X = Time/Index, Y = Value)
-  List<FlSpot> _generateSymptomSpots() {
-    final symptoms = userLogs.where((l) => l.type == LogType.symptom).toList();
-    return List.generate(symptoms.length, (index) {
-
-      // For this example, we assume subtitle contains "Level: X/10"
-           
-      return FlSpot(index.toDouble(), 7.0); // Dummy Y value
-    });
-  }
-
-  List<FlSpot> _generateActivitySpots() {
-    final activities = userLogs.where((l) => l.type == LogType.activity).toList();
-    return List.generate(activities.length, (index) {
-      return FlSpot(index.toDouble(), 5.0); // Dummy Y value
-    });
-  }
-
-  Widget _buildEmptyState() {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "Statistics will appear here 📊",
-            style: TextStyle(fontSize: 16, color: Colors.grey),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

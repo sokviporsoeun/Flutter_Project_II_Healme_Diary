@@ -1,23 +1,25 @@
-import 'package:flutter/material.dart';
-
-enum LogType { symptom, activity }
+import 'package:uuid/uuid.dart';
+import 'log_item.dart';
 
 class LogEntry {
+  final String id;
   final String title;
-  final String time;
-  final String subtitle;
-  final String dateGroup; // e.g., "Today, Jan 5"
-  final IconData icon;
-  final Color color;
-  final LogType type;
+  final String descriptions;
+  final DateTime date;
+  final LogItem logItem;
+  final int? severity;
 
   LogEntry({
+    String? id,             
     required this.title,
-    required this.time,
-    required this.subtitle,
-    required this.dateGroup,
-    required this.icon,
-    required this.color,
-    required this.type,
-  });
+    this.severity,
+    required this.date,
+    required this.logItem,
+    this.descriptions = "",
+  }) : id = id ?? const Uuid().v4(); 
 }
+
+// EntryLog l = EntryLog(title: title, date: date, logItem: logItem)
+
+
+

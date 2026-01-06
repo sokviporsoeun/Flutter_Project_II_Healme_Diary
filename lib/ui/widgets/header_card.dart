@@ -22,10 +22,7 @@ class HeaderCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 35,
-            backgroundImage: NetworkImage(avatarUrl),
-          ),
+          CircleAvatar(radius: 35, backgroundImage: NetworkImage(avatarUrl)),
           const SizedBox(width: 16),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,7 +39,7 @@ class HeaderCard extends StatelessWidget {
               Text(
                 greeting,
                 style: const TextStyle(
-                  fontSize: 22,
+                  fontSize: 15,
                   fontWeight: FontWeight.bold,
                 ),
               ),

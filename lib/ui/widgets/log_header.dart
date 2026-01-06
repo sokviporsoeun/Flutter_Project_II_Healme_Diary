@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 
-class SymptomHeader extends StatelessWidget {
+class LogHeader extends StatelessWidget {
   final IconData icon;
   final String label;
+  final Color color;
 
-  const SymptomHeader({super.key, required this.icon, required this.label});
+  const LogHeader({
+    super.key,
+    required this.icon,
+    required this.label,
+    this.color = Colors.orange,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +18,7 @@ class SymptomHeader extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 40,
-          backgroundColor: Colors.red.shade400,
+          backgroundColor: color,
           child: Icon(icon, size: 40, color: Colors.white),
         ),
         const SizedBox(height: 12),

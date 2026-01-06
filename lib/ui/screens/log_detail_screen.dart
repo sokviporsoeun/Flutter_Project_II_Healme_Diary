@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:healme_dairy/data/symptom_repository.dart';
+import 'package:healme_dairy/models/log_entry.dart';
 import 'package:intl/intl.dart';
-import '../../models/activity_item.dart';
-import '../widgets/symptom_detail_card.dart';
+import '../../models/log_item.dart';
+import '../widgets/log_header.dart';
 import '../widgets/save_button.dart';
 
-class SymptomDetailScreen extends StatefulWidget {
-  final ActivityItem symptom;
+class LogDetailScreen extends StatefulWidget {
+  final LogItem symptom;
 
-  const SymptomDetailScreen({
-    super.key,
-    required this.symptom,
-  });
+  const LogDetailScreen({super.key, required this.symptom});
 
   @override
-  State<SymptomDetailScreen> createState() => _SymptomDetailScreenState();
+  State<LogDetailScreen> createState() => _LogDetailScreenState();
 }
 
-class _SymptomDetailScreenState extends State<SymptomDetailScreen> {
+class _LogDetailScreenState extends State<LogDetailScreen> {
+  List<LogEntry> latestSymptoms = [];
   double _severity = 7;
   DateTime _selectedDate = DateTime.now();
   final TextEditingController _notesController = TextEditingController();
@@ -26,6 +26,19 @@ class _SymptomDetailScreenState extends State<SymptomDetailScreen> {
     if (_severity < 3) return 'Mild';
     if (_severity < 7) return 'Moderate';
     return 'Severe';
+  }
+
+  Color severityColor(String severity) {
+    switch (severity.toLowerCase()) {
+      case 'mild':
+        return const Color.fromARGB(255, 213, 220, 88);
+      case 'moderate':
+        return const Color.fromARGB(255, 249, 170, 43);
+      case 'severe':
+        return const Color.fromARGB(255, 255, 67, 67);
+      default:
+        return const Color.fromARGB(255, 255, 175, 175);
+    }
   }
 
   /// Date picker
@@ -42,7 +55,11 @@ class _SymptomDetailScreenState extends State<SymptomDetailScreen> {
     }
   }
 
-  bool get _isFormValid => _notesController.text.trim().isNotEmpty;
+  bool get _isFormValid {
+    return true;
+  }
+
+  bool get isActivity => widget.symptom.type == Type.activity;
 
   @override
   void initState() {
@@ -67,8 +84,10 @@ class _SymptomDetailScreenState extends State<SymptomDetailScreen> {
           icon: const Icon(Icons.arrow_back_ios, color: Colors.blue),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          'Log Symptom',
+        title: Text(
+          widget.symptom.type == Type.symptom
+              ? 'Log Symptom'
+              : 'Log Activities',
           style: TextStyle(color: Colors.black),
         ),
       ),
@@ -81,47 +100,49 @@ class _SymptomDetailScreenState extends State<SymptomDetailScreen> {
 
             /// Symptom header
             Center(
-              child: SymptomHeader(
+              child: LogHeader(
                 icon: widget.symptom.icon,
                 label: widget.symptom.label,
+                color: isActivity
+                    ? Colors.green
+                    : const Color.fromARGB(255, 231, 24, 48),
               ),
             ),
+            if (widget.symptom.type == Type.symptom) ...[
+              const SectionTitle('Severity'),
 
-            const SectionTitle('Severity'),
-            Center(
-              child: Column(
-                children: [
-                  Text(
-                    _severity.toInt().toString(),
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
+              Center(
+                child: Column(
+                  children: [
+                    Text(
+                      _severity.toInt().toString(),
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Text(
-                    severityText,
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                ],
+                    Text(
+                      severityText,
+                      style: const TextStyle(color: Colors.grey),
+                    ),
+                  ],
+                ),
               ),
-            ),
 
-            Slider(
-              value: _severity,
-              min: 0,
-              max: 10,
-              divisions: 10,
-              activeColor: Colors.orange,
-              inactiveColor: Colors.grey.shade200,
-              onChanged: (val) => setState(() => _severity = val),
-            ),
-
+              Slider(
+                value: _severity,
+                min: 0,
+                max: 10,
+                divisions: 10,
+                activeColor: severityColor(severityText),
+                inactiveColor: Colors.grey.shade200,
+                onChanged: (val) => setState(() => _severity = val),
+              ),
+            ],
             const SectionTitle('Time & Date'),
             CustomInputContainer(
               child: ListTile(
-                title: Text(
-                  DateFormat('dd MMM yyyy').format(_selectedDate),
-                ),
+                title: Text(DateFormat('dd MMM yyyy').format(_selectedDate)),
                 trailing: const Icon(
                   Icons.calendar_today,
                   color: Colors.blue,
@@ -159,15 +180,18 @@ class _SymptomDetailScreenState extends State<SymptomDetailScreen> {
         child: SaveButton(
           enabled: _isFormValid,
           onPressed: () {
-            final logData = {
-              'symptom': widget.symptom.label,
-              'severity': _severity.toInt(),
-              'date': _selectedDate.toIso8601String(),
-              'notes': _notesController.text,
-            };
-
-            debugPrint('Saving Log: $logData');
-            Navigator.pop(context);
+            final newLog = LogEntry(
+              title: widget.symptom.label,
+              severity: widget.symptom.type == Type.activity
+                  ? null
+                  : _severity.toInt(),
+              date: _selectedDate,
+              logItem: widget.symptom,
+              descriptions: _notesController.text,
+            );
+            SymptomRepository.addLog(newLog);
+            debugPrint('Saving Log: $newLog');
+            Navigator.pop(context, newLog);
           },
         ),
       ),

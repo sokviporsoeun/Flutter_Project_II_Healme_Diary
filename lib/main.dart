@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'ui/screens/main_screen.dart';
+import 'package:healme_dairy/ui/screens/spash_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MainScreen(),
+      home: SpashPage(),
     );
   }
 }

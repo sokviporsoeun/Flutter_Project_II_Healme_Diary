@@ -22,12 +22,17 @@ class SaveButton extends StatelessWidget {
           height: 52,
           child: ElevatedButton(
             onPressed: enabled ? onPressed : null,
+
             style: ElevatedButton.styleFrom(
+              backgroundColor: enabled ? Colors.blue : Colors.grey.shade400,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(14),
               ),
             ),
-            child: Text(label, style: const TextStyle(fontSize: 16)),
+            child: Text(
+              label,
+              style: const TextStyle(fontSize: 20, color: Colors.white),
+            ),
           ),
         ),
       ),
