@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:healme_dairy/data/users_pref.dart';
 import 'package:healme_dairy/ui/screens/enter_name_page.dart';
 import 'package:healme_dairy/ui/screens/healme_tab.dart';
-
 class SpashPage extends StatefulWidget {
   const SpashPage({super.key});
 
