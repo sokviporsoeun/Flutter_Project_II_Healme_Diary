@@ -15,11 +15,11 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _index = 0;
 
-  final screens = const [
-    HomeScreen(),
-    LogSymptomScreen(),
-    StatisticsScreen(),
-    HistoryScreen(),
+  final List<Widget> screens = [
+    const HomeScreen(),
+    const LogSymptomScreen(),
+    const StatisticsScreen(userLogs: []), 
+    const HistoryScreen(),
   ];
 
   @override

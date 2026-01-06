@@ -1,4 +1,5 @@
 import '../models/symptom_log.dart';
+import '../models/log_entry.dart';
 
 class SymptomRepository {
   static final List<SymptomLog> _logs = [];

@@ -19,7 +19,7 @@ class SymptomScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Symptoms')),
       body: SelectableGrid(
         items: symptoms,
-        selected: const {}, // ❌ no selection needed here
+        selected: const {}, 
         onTap: (label) {
           final symptom =
               symptoms.firstWhere((item) => item.label == label);

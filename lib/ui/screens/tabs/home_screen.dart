@@ -71,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               const SizedBox(height: 20),
 
-              /// EMPTY STATE
+              // Empty State
               if (latestSymptoms.isEmpty)
                 const Center(
                   child: Padding(
@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 )
 
-              /// DATA STATE
+              //data state
               else
                 ...latestSymptoms.map((log) {
                   return Padding(
