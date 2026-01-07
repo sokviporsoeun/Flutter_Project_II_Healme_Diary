@@ -12,13 +12,13 @@ class LogScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Log You Day",
+          "Log Your Day",
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        automaticallyImplyLeading: false, // Hides back button if in tabs
+        automaticallyImplyLeading: false, 
       ),
       body: GridView.count(
         crossAxisCount: 2,

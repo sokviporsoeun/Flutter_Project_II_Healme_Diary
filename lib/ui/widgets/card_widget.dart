@@ -64,7 +64,6 @@ class CardWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 15),
-
               // Text Content
               Expanded(
                 child: Padding(

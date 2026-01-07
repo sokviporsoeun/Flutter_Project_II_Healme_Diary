@@ -23,25 +23,25 @@ class BottomNavBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          NavBarItem(
+          ButtomBarItem(
             icon: Icons.home,
             label: 'Home',
             isActive: currentIndex == 0,
             onTap: () => onTap(0),
           ),
-          NavBarItem(
+          ButtomBarItem(
             icon: Icons.add_circle_outline,
             label: 'Log',
             isActive: currentIndex == 1,
             onTap: () => onTap(1),
           ),
-          NavBarItem(
+          ButtomBarItem(
             icon: Icons.show_chart,
             label: 'Statistics',
             isActive: currentIndex == 2,
             onTap: () => onTap(2),
           ),
-          NavBarItem(
+          ButtomBarItem(
             icon: Icons.access_time,
             label: 'History',
             isActive: currentIndex == 3,

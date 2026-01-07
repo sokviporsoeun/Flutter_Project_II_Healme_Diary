@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class NavBarItem extends StatelessWidget {
+class ButtomBarItem extends StatelessWidget {
   final IconData icon;
   final String label;
   final bool isActive;
   final VoidCallback onTap;
 
-  const NavBarItem({
+  const ButtomBarItem({
     super.key,
     required this.icon,
     required this.label,

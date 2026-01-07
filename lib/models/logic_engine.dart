@@ -7,8 +7,7 @@ class LogicEngine {
 
   LogicEngine({required this.logs, required this.targetSymptom});
 
-
-// For this Logic 
+  // For this Logic
   String analyxzeSymptom() {
     final symptomDates = logs
         .where(
