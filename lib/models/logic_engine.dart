@@ -7,25 +7,29 @@ class LogicEngine {
 
   LogicEngine({required this.logs, required this.targetSymptom});
 
-  String analyzeSymptomPattern() {
+
+// For this Logic 
+  String analyxzeSymptom() {
     final symptomDates = logs
         .where(
           (log) =>
               log.logItem.type == Type.symptom &&
               log.logItem.label == targetSymptom.label,
         )
-        .map((log) => log.date)
+        .map((log) => "${log.date.year}-${log.date.month}-${log.date.day}")
         .toSet();
 
+    //For this Condition is might be not happened because user save the symptom after analysis
     if (symptomDates.isEmpty) {
-      return "No enough data to analyze this symptom yet.";
+      return "Error: The saved log was not found in the analysis list.";
     }
 
     final Map<String, int> activityFrequency = {};
-
     for (final log in logs) {
+      final logDateString =
+          "${log.date.year}-${log.date.month}-${log.date.day}";
       if (log.logItem.type == Type.activity &&
-          symptomDates.contains(log.date)) {
+          symptomDates.contains(logDateString)) {
         activityFrequency.update(
           log.logItem.label,
           (value) => value + 1,
@@ -33,14 +37,12 @@ class LogicEngine {
         );
       }
     }
-
     if (activityFrequency.isEmpty) {
       return "No Data Recorded from this Symptom Found!";
     }
     final sorted = activityFrequency.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
     final top = sorted.first;
-
     return "When you had ${targetSymptom.label}, "
         "you most often  ${top.key} ${top.value} times. "
         "You probably cause this symptom becuase of this activity!";

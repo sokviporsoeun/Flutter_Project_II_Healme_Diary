@@ -192,7 +192,6 @@ class _LogDetailScreenState extends State<LogDetailScreen> {
           ],
         ),
       ),
-
       /// Save button
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20),
@@ -229,7 +228,7 @@ class _LogDetailScreenState extends State<LogDetailScreen> {
                 logs: allLogs,
                 targetSymptom: widget.symptom,
               );
-              final result = engine.analyzeSymptomPattern();
+              final result = engine.analyxzeSymptom();
 
               await Navigator.push(
                 // ignore: use_build_context_synchronously

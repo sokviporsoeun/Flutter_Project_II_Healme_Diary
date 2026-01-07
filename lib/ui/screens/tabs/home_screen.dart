@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       displayedSymptoms = isExpanded
           ? SymptomRepository.getTodayActivityLog()
-          : SymptomRepository.getAllSymptomLog();
+          : SymptomRepository.getTodaySymptomLog();
     });
   }
 

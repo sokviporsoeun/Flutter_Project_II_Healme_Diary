@@ -20,14 +20,6 @@ class SymptomRepository {
     return List.from(_logs);
   }
 
-  /// READ latest logs
-  static List<LogEntry> getLatestLog({int limit = 3}) {
-    _logs.sort((a, b) => b.date.compareTo(a.date));
-    return _logs.take(limit).map((log) => log).toList();
-  }
-
-
-
   static List<LogEntry> getTodayActivityLog() {
     final now = DateTime.now();
     final todayLogs = _logs
