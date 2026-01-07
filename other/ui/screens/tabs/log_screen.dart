@@ -10,16 +10,7 @@ class LogScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Log You Day",
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        automaticallyImplyLeading: false, // Hides back button if in tabs
-      ),
+      appBar: AppBar(title: const Text('Log')),
       body: GridView.count(
         crossAxisCount: 2,
         padding: const EdgeInsets.all(16),
@@ -48,12 +39,9 @@ class LogScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(item.icon, size: 40  ),
+                  Icon(item.icon, size: 40),
                   const SizedBox(height: 12),
-                  Text(
-                    item.name.toUpperCase(),
-                    style: const TextStyle(fontSize: 16),
-                  ),
+                  Text(item.name.toUpperCase(), style: const TextStyle(fontSize: 16)),
                 ],
               ),
             ),

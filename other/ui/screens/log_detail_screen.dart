@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../data/symptom_repository.dart';
-import '../../models/log_entry.dart';
+import 'package:healme_dairy/data/symptom_repository.dart';
+import 'package:healme_dairy/models/log_entry.dart';
 import 'package:intl/intl.dart';
 import '../../models/log_item.dart';
 import '../widgets/log_header.dart';
@@ -88,11 +88,9 @@ class _LogDetailScreenState extends State<LogDetailScreen> {
           widget.symptom.type == Type.symptom
               ? 'Log Symptom'
               : 'Log Activities',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.black),
         ),
-        centerTitle: true,
       ),
-
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../data/users_pref.dart';
+import 'package:healme_dairy/data/users_pref.dart';
 import 'package:intl/intl.dart'; 
-import '../../widgets/empty_widget.dart';
-import '../../widgets/card_widget.dart';
+import 'package:healme_dairy/ui/widgets/empty_widget.dart';
+import 'package:healme_dairy/ui/widgets/card_widget.dart';
 import '../../widgets/header_card.dart';
 import '../../widgets/section_header.dart';
 import '../../../data/symptom_repository.dart';

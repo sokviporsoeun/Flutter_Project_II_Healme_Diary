@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../models/log_entry.dart';
+import 'package:healme_dairy/models/log_entry.dart';
 import 'package:intl/intl.dart';
 
 class CardWidget extends StatelessWidget {

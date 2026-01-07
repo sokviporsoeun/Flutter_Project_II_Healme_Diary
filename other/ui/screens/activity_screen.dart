@@ -12,24 +12,22 @@ class ActivityScreen extends StatefulWidget {
 }
 
 class _ActivityScreenState extends State<ActivityScreen> {
-final activities =LogItem.allItems
-    .where((i) => i.type == Type.activity)
-    .toList();
+  final activities = [
+    LogItem('Exercise', Icons.fitness_center, Type.activity),
+    LogItem('Drink Water', Icons.local_drink, Type.activity),
+    LogItem('Sleep', Icons.bedtime, Type.activity),
+    LogItem('Use Phone', Icons.phone_android, Type.activity)
+  ];
 
   final selected = <String>{};
 
   @override
   Widget build(BuildContext context) {
      return Scaffold(
-      appBar: AppBar(
-        title: const Text("Activities", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Activity')),
       body: SelectableGrid(
         items: activities,
-        selected: selected, 
+        selected: const {}, 
         onTap: (label) {
           final activity =
               activities.firstWhere((item) => item.label == label);

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:healme_dairy/data/symptom_repository.dart';
 import 'package:healme_dairy/models/log_item.dart';
 import 'package:healme_dairy/ui/widgets/empty_widget.dart';

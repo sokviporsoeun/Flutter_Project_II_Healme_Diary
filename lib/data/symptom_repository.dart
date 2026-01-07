@@ -1,14 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:healme_dairy/models/log_item.dart';
-
+import '../models/log_item.dart';
 import '../models/log_entry.dart';
+import 'sqlite.dart';
 
 class SymptomRepository {
-  static final List<LogEntry> _logs = [...mockLogs];
-
+  static List<LogEntry> _logs = [];
+  static Future<void> setLogs() async{
+    _logs = await Sqlite.getEntries();
+  }
   /// CREATE
-  static void addLog(LogEntry log) {
+  static Future<void> addLog(LogEntry log) async{
     _logs.add(log);
+    await Sqlite.insertEntry(log);
   }
 
   /// READ all logs
@@ -57,10 +59,11 @@ class SymptomRepository {
 
 
 
-  static bool updateLog(String id, LogEntry newLog) {
+  static Future<bool> updateLog(String id, LogEntry newLog) async {
     for (int i = 0; i < _logs.length; i++) {
       if (_logs[i].id == id) {
         _logs[i] = newLog;
+        await Sqlite.updateEntry(newLog, id);
         return true;
       }
     }
@@ -68,9 +71,10 @@ class SymptomRepository {
   }
 
 
-  static bool deleteLog(String id) {
+  static Future<bool> deleteLog(String id) async{
     final initialLength = _logs.length;
     _logs.removeWhere((log) => log.id == id);
+    await Sqlite.deleteEntry(id);
     return _logs.length < initialLength;
   }
 
@@ -81,46 +85,3 @@ class SymptomRepository {
 }
 
 
-
-// Sample LogItems
-final headache = LogItem('Headache', Icons.healing, Type.symptom);
-final fever = LogItem('Fever', Icons.thermostat, Type.symptom);
-final exercise = LogItem('Exercise', Icons.fitness_center, Type.activity);
-final drinkWater = LogItem('Drink Water', Icons.local_drink, Type.activity);
-
-// Generate mock LogEntries
-final List<LogEntry> mockLogs = [
-  LogEntry(
-    title: 'Morning Headache',
-    logItem: headache,
-    date: DateTime.now().subtract(const Duration(hours: 2)),
-    severity: 7,
-    descriptions: 'Throbbing pain in the morning',
-  ),
-  LogEntry(
-    title: 'Fever in Afternoon',
-    logItem: fever,
-    date: DateTime.now().subtract(const Duration(hours: 5)),
-    severity: 5,
-    descriptions: 'Temperature around 38°C',
-  ),
-  LogEntry(
-    title: 'Morning Run',
-    logItem: exercise,
-    date: DateTime.now().subtract(const Duration(hours: 3)),
-    descriptions: 'Ran 3 km in 25 min',
-  ),
-  LogEntry(
-    title: 'Drink Water',
-    logItem: drinkWater,
-    date: DateTime.now().subtract(const Duration(hours: 1)),
-    descriptions: 'Drank 500ml water',
-  ),
-  LogEntry(
-    title: 'Evening Headache',
-    logItem: headache,
-    date: DateTime.now().subtract(const Duration(days: 1, hours: 2)),
-    severity: 4,
-    descriptions: 'Mild headache after work',
-  ),
-];

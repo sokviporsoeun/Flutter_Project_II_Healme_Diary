@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
-import './data/sqlite.dart';
-import './ui/screens/spash_page.dart';
-import 'data/symptom_repository.dart';
+import 'package:healme_dairy/ui/screens/spash_page.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Sqlite.initDatabase();
-  await SymptomRepository.setLogs();
-  
+void main() {
   runApp(const MyApp());
 }
 

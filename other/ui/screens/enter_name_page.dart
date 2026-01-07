@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../data/users_pref.dart';
-import '../../ui/screens/healme_tab.dart';
-import '../../ui/widgets/save_button.dart';
+import 'package:healme_dairy/data/users_pref.dart';
+import 'package:healme_dairy/ui/screens/healme_tab.dart';
+import 'package:healme_dairy/ui/widgets/save_button.dart';
 
 class EnterNamePage extends StatefulWidget {
   const EnterNamePage({super.key});
