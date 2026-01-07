@@ -35,15 +35,14 @@ class LogicEngine {
     }
 
     if (activityFrequency.isEmpty) {
-      return "No activity pattern found for this symptom.";
+      return "No Data Recorded from this Symptom Found!";
     }
-
     final sorted = activityFrequency.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
     final top = sorted.first;
 
-    return "When you had '${targetSymptom.label}', "
-        "you most often did '${top.key}' (${top.value} times). "
-        "This activity may be contributing to the symptom.";
+    return "When you had ${targetSymptom.label}, "
+        "you most often  ${top.key} ${top.value} times. "
+        "You probably cause this symptom becuase of this activity!";
   }
 }

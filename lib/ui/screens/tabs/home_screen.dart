@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../data/users_pref.dart';
-import 'package:intl/intl.dart'; 
+import 'package:intl/intl.dart';
 import '../../widgets/empty_widget.dart';
 import '../../widgets/card_widget.dart';
 import '../../widgets/header_card.dart';
@@ -19,7 +19,6 @@ class _HomeScreenState extends State<HomeScreen> {
   List<LogEntry> displayedSymptoms = [];
   bool isExpanded = false;
   String name = '';
-  
 
   @override
   void initState() {
@@ -31,8 +30,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void _loadData() {
     setState(() {
       displayedSymptoms = isExpanded
-          ? SymptomRepository.getAllSymptomLog()
-          : SymptomRepository.getLastestSymptomLog();
+          ? SymptomRepository.getTodayActivityLog()
+          : SymptomRepository.getAllSymptomLog();
     });
   }
 
@@ -46,10 +45,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _getname() async {
     String? savedName = await UsersPref.getName();
     if (savedName != null && savedName.isNotEmpty) {
-    setState(() {
-      name = savedName;
-    });
-  }
+      setState(() {
+        name = savedName;
+      });
+    }
   }
 
   String get _currentDateFormatted {
@@ -59,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FE), // Consistent background
+      backgroundColor: const Color(0xFFF8F9FE), 
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
@@ -71,11 +70,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 greeting: 'Welcome, $name!',
                 avatarUrl: 'https://i.pravatar.cc/150?img=12',
               ),
-
               const SizedBox(height: 32),
               SectionHeader(
-                title: isExpanded ? 'All History' : 'Latest Symptoms',
-                actionText: isExpanded ? 'Show Less' : 'View All',
+                title: isExpanded ? 'Activity Today' : 'Symptom Today',
+                actionText: isExpanded ? 'Show Symptons' : 'Show Activities',
                 onTap: _views,
               ),
 
@@ -98,7 +96,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: displayedSymptoms.length,
                   itemBuilder: (context, index) {
-                    return CardWidget(logEntry: displayedSymptoms[index]);
+                    return CardWidget(
+                      logEntry: displayedSymptoms[index],
+                      onRefresh: (() {
+                        _loadData();
+                      }),
+                    );
                   },
                 ),
               const SizedBox(height: 20),

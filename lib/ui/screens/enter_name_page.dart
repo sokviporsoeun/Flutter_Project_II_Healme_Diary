@@ -45,7 +45,7 @@ class _EnterNamePageState extends State<EnterNamePage> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Title(
@@ -61,7 +61,7 @@ class _EnterNamePageState extends State<EnterNamePage> {
               child: TextField(
                 controller: _nameController,
                 decoration: InputDecoration(
-                  labelText: 'Your name',
+                  labelText: 'Put your name here',
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -69,7 +69,6 @@ class _EnterNamePageState extends State<EnterNamePage> {
             SizedBox(height: 10),
             Padding(padding: EdgeInsets.all(10)),
             SaveButton(onPressed: onSubmit),
-            
           ],
         ),
       ),

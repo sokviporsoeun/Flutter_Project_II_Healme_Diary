@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:healme_dairy/models/logic_engine.dart';
+import 'package:healme_dairy/ui/screens/analysis_screen.dart';
 import '../../data/symptom_repository.dart';
 import '../../models/log_entry.dart';
 import 'package:intl/intl.dart';
@@ -8,8 +10,9 @@ import '../widgets/save_button.dart';
 
 class LogDetailScreen extends StatefulWidget {
   final LogItem symptom;
+  final LogEntry? existingEntry;
 
-  const LogDetailScreen({super.key, required this.symptom});
+  const LogDetailScreen({super.key, required this.symptom, this.existingEntry});
 
   @override
   State<LogDetailScreen> createState() => _LogDetailScreenState();
@@ -17,9 +20,9 @@ class LogDetailScreen extends StatefulWidget {
 
 class _LogDetailScreenState extends State<LogDetailScreen> {
   List<LogEntry> latestSymptoms = [];
-  double _severity = 7;
-  DateTime _selectedDate = DateTime.now();
-  final TextEditingController _notesController = TextEditingController();
+  late double _severity;
+  late DateTime _selectedDate;
+  late TextEditingController _notesController;
 
   /// Severity label based on slider value
   String get severityText {
@@ -46,12 +49,22 @@ class _LogDetailScreenState extends State<LogDetailScreen> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
+      firstDate: DateTime(2025),
+      lastDate: DateTime.now(),
     );
 
     if (picked != null) {
-      setState(() => _selectedDate = picked);
+      final now = DateTime.now();
+
+      final updated = DateTime(
+        picked.year,
+        picked.month,
+        picked.day,
+        now.hour,
+        now.minute,
+        now.second,
+      );
+      setState(() => _selectedDate = updated);
     }
   }
 
@@ -64,7 +77,11 @@ class _LogDetailScreenState extends State<LogDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _notesController.addListener(() => setState(() {}));
+    _severity = widget.existingEntry?.severity?.toDouble() ?? 7.0;
+    _selectedDate = widget.existingEntry?.date ?? DateTime.now();
+    _notesController = TextEditingController(
+      text: widget.existingEntry?.descriptions ?? "",
+    );
   }
 
   @override
@@ -157,7 +174,7 @@ class _LogDetailScreenState extends State<LogDetailScreen> {
             const SectionTitle('Notes (Optional)'),
             TextField(
               controller: _notesController,
-              maxLines: 4,
+              maxLines: 5,
               decoration: InputDecoration(
                 hintText: 'Add details...',
                 border: OutlineInputBorder(
@@ -181,8 +198,12 @@ class _LogDetailScreenState extends State<LogDetailScreen> {
         padding: const EdgeInsets.all(20),
         child: SaveButton(
           enabled: _isFormValid,
-          onPressed: () {
+          label: widget.symptom.type == Type.symptom
+              ? 'Save and Analysis'
+              : 'Save',
+          onPressed: () async {
             final newLog = LogEntry(
+              id: widget.existingEntry?.id,
               title: widget.symptom.label,
               severity: widget.symptom.type == Type.activity
                   ? null
@@ -191,8 +212,38 @@ class _LogDetailScreenState extends State<LogDetailScreen> {
               logItem: widget.symptom,
               descriptions: _notesController.text,
             );
-            SymptomRepository.addLog(newLog);
-            debugPrint('Saving Log: $newLog');
+
+            if (widget.existingEntry != null) {
+              await SymptomRepository.updateLog(
+                widget.existingEntry!.id,
+                newLog,
+              );
+            } else {
+              await SymptomRepository.addLog(newLog);
+            }
+
+            if (widget.symptom.type == Type.symptom) {
+              final allLogs = SymptomRepository.getAll();
+
+              final engine = LogicEngine(
+                logs: allLogs,
+                targetSymptom: widget.symptom,
+              );
+              final result = engine.analyzeSymptomPattern();
+
+              await Navigator.push(
+                // ignore: use_build_context_synchronously
+                context,
+                MaterialPageRoute(
+                  builder: (_) => SymptomAnalysisScreen(
+                    symptomLabel: widget.symptom.label,
+                    analysisResult: result,
+                  ),
+                ),
+              );
+            }
+
+            if (!mounted) return;
             Navigator.pop(context, newLog);
           },
         ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../models/log_item.dart';
 import '../widgets/selectable_grid.dart';
 import 'log_detail_screen.dart';

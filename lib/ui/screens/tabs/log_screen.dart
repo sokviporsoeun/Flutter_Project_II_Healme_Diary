@@ -48,7 +48,7 @@ class LogScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(item.icon, size: 40  ),
+                  Icon(item.icon, size: 40),
                   const SizedBox(height: 12),
                   Text(
                     item.name.toUpperCase(),
